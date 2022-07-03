@@ -1,23 +1,40 @@
 from tkinter import *
 from tkinter import ttk
 
-game_window = Tk()
-game_window.title("Bees&Wasps")
-game_window.geometry("800x800")
+class game:
 
-mainframe = ttk.Frame(game_window, padding="3 3 12 12")
-mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
-game_window.columnconfigure(0, weight=1)
-game_window.rowconfigure(0, weight=1)
+    def __init__(self, root):
+        root.title("Bees & Wasps")
 
-message = StringVar()
+        #Main game turtle holder
+        graphics_holder = Canvas(root, background="black")
+        graphics_holder.grid(column=0, row=0, sticky=(N, W, E, S))
 
-ttk.Button(mainframe, text="Play", command=(lambda: message.set("PLAY :D")))\
-    .grid(column=0, row=0, sticky=(N, S, E, W))
-ttk.Button(mainframe, text="Quit", command=(lambda: message.set(":(")))\
-    .grid(column=0, row=1, sticky=(N, S, E, W))
+        #Aux info turtle holder
+        #TODO
 
-ttk.Label(mainframe, textvariable=message, font=("Arial", 100))\
-    .grid(column=0, row=2, sticky=(N, S, E, W))
+        #Info place
+        info_frame = ttk.Frame(root, borderwidth=2, relief="solid")
+        info_frame.grid(column=0, row=1)
 
-game_window.mainloop()
+        info_label = ttk.Label(info_frame, text="Sample text", width=50)
+        info_label.grid(column=0, row=0)
+
+        #Button place
+        button_frame = ttk.Frame(root, borderwidth=2, relief="solid")
+        button_frame.grid(column=1, row=0, sticky=(N, W, E, S))
+
+        info_label1 = ttk.Label(button_frame, text="Sample text", anchor=CENTER)
+        info_label1.grid(column=0, row=0)
+
+        #Grid config
+        root.columnconfigure(0, minsize=600)
+        root.rowconfigure(0, minsize=600)
+        root.columnconfigure(1, minsize=100)
+        root.rowconfigure(1, minsize=100)
+
+        print(root.grid_slaves())
+
+root = Tk()
+game(root)
+root.mainloop
