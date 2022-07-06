@@ -1,9 +1,11 @@
 from tkinter import *
 from tkinter import ttk
 import turtle
+import time
 
 class game:
 
+    test_time = 0
     def __init__(self, root):
         root.title("Bees & Wasps")
 
@@ -25,14 +27,23 @@ class game:
         root.rowconfigure(1, minsize=100)
 
     def _init_graphics(self, root):
-        graphics_holder = Canvas(root, background="black")
-        graphics_holder.grid(column=0, row=0, sticky=(N, W, E, S))
+        graphics_holder = Canvas(root, background="black", width=800, height=600)
+        graphics_holder.grid(column=0, row=0)
+        #It actually creates a 802x602 canvas
 
         screen = turtle.TurtleScreen(graphics_holder)
         screen.bgcolor("black")
 
-        t = turtle.RawTurtle(screen, shape="turtle")
+        t = turtle.RawTurtle(screen, shape="square")
         t.color("white")
+        t.penup()
+        t.speed(0)
+
+        screen.listen()
+        screen.onkeypress(self.goup, "w")
+        screen.onkeypress(self.godown, "s")
+        screen.onkeypress(self.goleft, "a")
+        screen.onkeypress(self.goright, "d")
 
         self.s = screen
         self.t = t
@@ -41,10 +52,9 @@ class game:
         self.info_frame = ttk.Frame(root, borderwidth=2, relief="solid", padding=5)
         self.info_frame.grid(column=0, row=1, sticky=(N, W, S, E))
 
-        self.info_text = Text(self.info_frame, height=5)
+        self.info_text = Text(self.info_frame, height=5, width=100)
         self.info_text.grid(column=0, row=0)
         self.info_text.configure(state="disable")
-
 
         self.scroll = Scrollbar(self.info_frame, orient=VERTICAL, command=self.info_text.yview)
         self.scroll.grid(column=1, row=0, sticky=(N,S))
@@ -69,6 +79,30 @@ class game:
             self.info_text.delete("end - 1 line", "end")
         self.info_text.insert(1.0, msg.replace("\n","")+"\n")
         self.info_text.configure(state="disable")
+
+    def cal_test_time(self):
+        ntime=time.time()
+        print(ntime-self.test_time)
+        self.test_time = ntime
+
+    def goup(self):
+        self.cal_test_time()
+        self.t.seth(90)
+        self.t.forward(1)
+
+    def godown(self):
+        self.cal_test_time()
+        self.t.seth(270)
+        self.t.forward(1)
+    def goright(self):
+        self.cal_test_time()
+        self.t.seth(0)
+        self.t.forward(1)
+
+    def goleft(self):
+        self.cal_test_time()
+        self.t.seth(180)
+        self.t.forward(1)
 
 root = Tk()
 game(root)
