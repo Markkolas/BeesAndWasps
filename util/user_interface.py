@@ -1,9 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 import turtle
-import time
 
-class game:
+class UI:
 
     test_time = 0
     def __init__(self, root):
@@ -94,6 +93,7 @@ class game:
         self.cal_test_time()
         self.t.seth(270)
         self.t.forward(1)
+
     def goright(self):
         self.cal_test_time()
         self.t.seth(0)
@@ -104,6 +104,7 @@ class game:
         self.t.seth(180)
         self.t.forward(1)
 
-root = Tk()
-game(root)
-root.mainloop
+if "__main__" == __name__:
+    root = Tk()
+    UI(root)
+    root.mainloop
