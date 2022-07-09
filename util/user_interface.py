@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import turtle
+import time
 
 class UI:
 
@@ -12,7 +13,7 @@ class UI:
         self._init_graphics(root)
 
         #Aux info turtle holder
-        #TODO
+        self._init
 
         #Info place
         self._init_text(root)
