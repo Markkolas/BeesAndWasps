@@ -36,7 +36,7 @@ class UI:
 
         t = turtle.RawTurtle(screen, shape="square")
         t.color("white")
-        t.penup()
+        t.hideturtle()
         t.speed(0)
 
         screen.listen()
@@ -55,8 +55,10 @@ class UI:
         screen = turtle.TurtleScreen(graphics_holder)
         screen.bgcolor("black")
 
-        t = turtle.RawTurtle(screen, shape="square")
+        t = turtle.RawTurtle(screen)
         t.color("white")
+        t.hideturtle()
+        t.speed(0)
 
         self.si = screen
         self.ti = t
@@ -76,7 +78,7 @@ class UI:
         self.button_frame = ttk.Frame(root, borderwidth=2, relief="solid", padding=5)
         self.button_frame.grid(column=1, row=0, sticky=(N, W, E, S))
 
-        self.button1 = ttk.Button(self.button_frame, text="Test one", command=(lambda: self.winfo("Hello")))
+        self.button1 = ttk.Button(self.button_frame, text="Test one", command=(lambda: self.uparrow()))
         self.button1.grid(row=0, column=0)
 
         self.button2 = ttk.Button(self.button_frame, text="Test two", command=(lambda: self.winfo("Hi")))
@@ -89,6 +91,15 @@ class UI:
             self.info_text.delete("end - 1 line", "end")
         self.info_text.insert(1.0, msg.replace("\n","")+"\n")
         self.info_text.configure(state="disable")
+
+    def uparrow(self):
+        self.ti.pendown()
+
+        self.ti.goto(0,-40)
+        self.ti.goto(0,40)
+        self.ti.goto(-10,30)
+        self.ti.goto(10,30)
+        self.ti.goto(0,40)
 
     def cal_test_time(self):
         ntime=time.time()
