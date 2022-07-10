@@ -13,7 +13,7 @@ class UI:
         self._init_graphics(root)
 
         #Aux info turtle holder
-        self._init
+        self._init_info_graphs(root)
 
         #Info place
         self._init_text(root)
@@ -36,23 +36,40 @@ class UI:
 
         t = turtle.RawTurtle(screen, shape="square")
         t.color("white")
-        t.penup()
+        t.hideturtle()
         t.speed(0)
 
         screen.listen()
-        screen.onkeypress(self.goup, "w")
-        screen.onkeypress(self.godown, "s")
-        screen.onkeypress(self.goleft, "a")
-        screen.onkeypress(self.goright, "d")
+        screen.onkeypress(self.goup, "Up")
+        screen.onkeypress(self.godown, "Down")
+        screen.onkeypress(self.goleft, "Left")
+        screen.onkeypress(self.goright, "Right")
+
+        graphics_holder.bind('<FocusOut>', lambda e: screen.listen())
 
         self.s = screen
         self.t = t
+
+    def _init_info_graphs(self, root):
+        graphics_holder = Canvas(root, background="black", width=80, height=80)
+        graphics_holder.grid(column=1, row=1)
+
+        screen = turtle.TurtleScreen(graphics_holder)
+        screen.bgcolor("black")
+
+        t = turtle.RawTurtle(screen)
+        t.color("white")
+        t.hideturtle()
+        t.speed(0)
+
+        self.si = screen
+        self.ti = t
 
     def _init_text(self, root):
         self.info_frame = ttk.Frame(root, borderwidth=2, relief="solid", padding=5)
         self.info_frame.grid(column=0, row=1, sticky=(N, W, S, E))
 
-        self.info_text = Text(self.info_frame, height=5, width=100)
+        self.info_text = Text(self.info_frame, height=5, width=100, background="black", foreground="white")
         self.info_text.grid(column=0, row=0)
         self.info_text.configure(state="disable")
 
@@ -63,14 +80,26 @@ class UI:
         self.button_frame = ttk.Frame(root, borderwidth=2, relief="solid", padding=5)
         self.button_frame.grid(column=1, row=0, sticky=(N, W, E, S))
 
-        self.button1 = ttk.Button(self.button_frame, text="Test one", command=(lambda: self.winfo("Hello")))
+
+        """
+        Let me explain. I want the UI to be FULLY INDEPENDENT of Tales. In fact,
+        I want Tales to do all the non-interface logic, such as generating bees and stuff.
+
+        So, I want the UI buttons to generate events that will be processed in Tales,
+        where the tkinter mainloop is called. Because of that, virtual event are created
+        and launched by the buttons when they are pressed.
+        """
+        #https://stackoverflow.com/questions/31798723/tkinter-generate-and-invoke-virtual-event-between-different-widgets
+        self.button1 = ttk.Button(self.button_frame, text="Test one")
         self.button1.grid(row=0, column=0)
+        root.event_add("<<B1>>", "None")
+        self.button1.configure(command=(lambda: root.event_generate("<<B1>>")))
 
-        self.button2 = ttk.Button(self.button_frame, text="Test two", command=(lambda: self.winfo("Hi")))
+        self.button2 = ttk.Button(self.button_frame, text="Test two")
         self.button2.grid(row=0, column=1)
+        root.event_add("<<B2>>", "None")
+        self.button2.configure(command=(lambda: root.event_generate("<<B2>>")))
 
-    def _init_aux():
-        pass
 
     def winfo(self, msg):
         #See: https://tkdocs.com/tutorial/text.html
@@ -85,6 +114,7 @@ class UI:
         print(ntime-self.test_time)
         self.test_time = ntime
 
+    #KEYBINDINGS CALLBACKS
     def goup(self):
         self.cal_test_time()
         self.t.seth(90)
@@ -108,4 +138,4 @@ class UI:
 if "__main__" == __name__:
     root = Tk()
     UI(root)
-    root.mainloop
+    root.mainloop()
