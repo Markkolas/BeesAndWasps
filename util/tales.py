@@ -1,5 +1,6 @@
 #All are from and "is" part of me
 from tkinter import *
+from tkinter import ttk
 import time
 import turtle
 
