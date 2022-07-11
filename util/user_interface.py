@@ -6,7 +6,7 @@ import time
 class UI:
 
     test_time = 0
-    def __init__(self, root):
+    def __init__(self, root, callbacks):
         root.title("Bees & Wasps")
 
         #Main game turtle holder
@@ -18,7 +18,7 @@ class UI:
         #Info place
         self._init_text(root)
         #Button place
-        self._init_buttons(root)
+        self._init_buttons(root, callbacks)
 
         #Grid config
         root.columnconfigure(0, minsize=600)
@@ -40,10 +40,10 @@ class UI:
         t.speed(0)
 
         screen.listen()
-        screen.onkeypress(self.goup, "Up")
-        screen.onkeypress(self.godown, "Down")
-        screen.onkeypress(self.goleft, "Left")
-        screen.onkeypress(self.goright, "Right")
+        screen.onkeypress(self.drawup, "Up")
+        screen.onkeypress(self.drawdown, "Down")
+        screen.onkeypress(self.drawleft, "Left")
+        screen.onkeypress(self.drawright, "Right")
 
         graphics_holder.bind('<FocusOut>', lambda e: screen.listen())
 
@@ -76,29 +76,15 @@ class UI:
         self.scroll = Scrollbar(self.info_frame, orient=VERTICAL, command=self.info_text.yview)
         self.scroll.grid(column=1, row=0, sticky=(N,S))
 
-    def _init_buttons(self, root):
+    def _init_buttons(self, root, callbacks):
         self.button_frame = ttk.Frame(root, borderwidth=2, relief="solid", padding=5)
         self.button_frame.grid(column=1, row=0, sticky=(N, W, E, S))
 
-
-        """
-        Let me explain. I want the UI to be FULLY INDEPENDENT of Tales. In fact,
-        I want Tales to do all the non-interface logic, such as generating bees and stuff.
-
-        So, I want the UI buttons to generate events that will be processed in Tales,
-        where the tkinter mainloop is called. Because of that, virtual event are created
-        and launched by the buttons when they are pressed.
-        """
-        #https://stackoverflow.com/questions/31798723/tkinter-generate-and-invoke-virtual-event-between-different-widgets
-        self.button1 = ttk.Button(self.button_frame, text="Test one")
+        self.button1 = ttk.Button(self.button_frame, text="Test one", command=callbacks["Worker"])
         self.button1.grid(row=0, column=0)
-        root.event_add("<<B1>>", "None")
-        self.button1.configure(command=(lambda: root.event_generate("<<B1>>")))
 
-        self.button2 = ttk.Button(self.button_frame, text="Test two")
+        self.button2 = ttk.Button(self.button_frame, text="Test two", command=callbacks["Drone"])
         self.button2.grid(row=0, column=1)
-        root.event_add("<<B2>>", "None")
-        self.button2.configure(command=(lambda: root.event_generate("<<B2>>")))
 
 
     def winfo(self, msg):
@@ -115,22 +101,22 @@ class UI:
         self.test_time = ntime
 
     #KEYBINDINGS CALLBACKS
-    def goup(self):
+    def drawup(self):
         self.cal_test_time()
         self.t.seth(90)
         self.t.forward(1)
 
-    def godown(self):
+    def drawdown(self):
         self.cal_test_time()
         self.t.seth(270)
         self.t.forward(1)
 
-    def goright(self):
+    def drawright(self):
         self.cal_test_time()
         self.t.seth(0)
         self.t.forward(1)
 
-    def goleft(self):
+    def drawleft(self):
         self.cal_test_time()
         self.t.seth(180)
         self.t.forward(1)
