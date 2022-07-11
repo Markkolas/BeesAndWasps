@@ -15,20 +15,21 @@ https://stackoverflow.com/questions/31798723/tkinter-generate-and-invoke-virtual
 """
 
 def gen_worker():
-    interface.winfo("Hello")
+    interface.winfo("Generate worker bee")
 
 def gen_drone():
-    interface.winfo("Hi")
+    interface.winfo("Generate drone bee")
 
 callbacks = {
     "Worker" : gen_worker,
     "Drone" : gen_drone,
 }
 
-player = qb.Queen(0, 0)
 root = Tk()
 interface = u.UI(root, callbacks)
 
-print(root.event_info("<<B1>>"))
+player = qb.Queen((0, 0))
+
+print(player.get_position())
 
 root.mainloop()
