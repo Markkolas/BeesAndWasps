@@ -2,8 +2,9 @@
 
 class Bee:
 
-    def __init__(self, pos):
-        self.pos = pos
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
     def get_position(self):
-        return self.pos
+        return [self.x, self.y]

@@ -10,7 +10,7 @@ class UI:
         root.title("Bees & Wasps")
 
         #Main game turtle holder
-        self._init_graphics(root)
+        self._init_graphics(root, callbacks)
 
         #Aux info turtle holder
         self._init_info_graphs(root)
@@ -26,7 +26,7 @@ class UI:
         root.columnconfigure(1, minsize=100)
         root.rowconfigure(1, minsize=100)
 
-    def _init_graphics(self, root):
+    def _init_graphics(self, root, callbacks):
         graphics_holder = Canvas(root, background="black", width=800, height=600)
         graphics_holder.grid(column=0, row=0)
         #It actually creates a 802x602 canvas
@@ -40,10 +40,10 @@ class UI:
         t.speed(0)
 
         screen.listen()
-        screen.onkeypress(self.drawup, "Up")
-        screen.onkeypress(self.drawdown, "Down")
-        screen.onkeypress(self.drawleft, "Left")
-        screen.onkeypress(self.drawright, "Right")
+        screen.onkeypress(callbacks["PUp"], "Up")
+        screen.onkeypress(callbacks["PDown"], "Down")
+        screen.onkeypress(callbacks["PLeft"], "Left")
+        screen.onkeypress(callbacks["PRight"], "Right")
 
         graphics_holder.bind('<FocusOut>', lambda e: screen.listen())
 
@@ -95,31 +95,8 @@ class UI:
         self.info_text.insert(1.0, msg.replace("\n","")+"\n")
         self.info_text.configure(state="disable")
 
-    def cal_test_time(self):
-        ntime=time.time()
-        print(ntime-self.test_time)
-        self.test_time = ntime
-
-    #KEYBINDINGS CALLBACKS
-    def drawup(self):
-        self.cal_test_time()
-        self.t.seth(90)
-        self.t.forward(1)
-
-    def drawdown(self):
-        self.cal_test_time()
-        self.t.seth(270)
-        self.t.forward(1)
-
-    def drawright(self):
-        self.cal_test_time()
-        self.t.seth(0)
-        self.t.forward(1)
-
-    def drawleft(self):
-        self.cal_test_time()
-        self.t.seth(180)
-        self.t.forward(1)
+    def draw_player(self, posx, posy):
+        self.t.goto(posx, posy)
 
 if "__main__" == __name__:
     root = Tk()
